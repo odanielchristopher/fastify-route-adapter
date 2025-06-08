@@ -1,18 +1,16 @@
 import { Injectable } from '../../../kernel/decorators/Injectable';
 import { Schema } from '../../../kernel/decorators/Schema';
-import { Controller } from '../../contracts/Controller';
+import { Controller, IController } from '../../contracts/IController';
 import { SignUpUseCase } from '../../usecases/auth/SignUpUseCase';
 
 import { SignUpSchema, signUpSchema } from './schemas/signUpSchema';
 
 @Injectable()
 @Schema(signUpSchema)
-export class SignUpController extends Controller<unknown> {
-  constructor(private readonly signUpUseCase: SignUpUseCase) {
-    super();
-  }
+export class SignUpController implements IController<unknown> {
+  constructor(private readonly signUpUseCase: SignUpUseCase) {}
 
-  async handle(
+  async execute(
     params: Controller.Request<SignUpSchema>
   ): Promise<Controller.Response<SignUpController.Response>> {
     const { email, name, password } = params.body;

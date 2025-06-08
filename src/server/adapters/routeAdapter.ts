@@ -1,15 +1,30 @@
-import { RouteHandlerMethod } from 'fastify';
-
-import { Controller } from '../../application/contracts/Controller';
+import { Controller } from '../../application/contracts/IController';
+import { getSchema } from '../../kernel/decorators/Schema';
 import { Registry } from '../../kernel/di/Registry';
-import { Constructor } from '../../shared/types/Constructor';
+import { RouteAdapter } from '../@types/RouteAdapter';
 
-export function routeAdapter(impl: Constructor<any>): RouteHandlerMethod {
-  const controller = Registry.getInstance().resolve(impl) as Controller<any>;
+export const routeAdapter: RouteAdapter = async (
+  fastify,
+  {
+    url,
+    method,
+    impl,
+  }
+) => {
+  const controller = Registry.getInstance().resolve(impl);
+  const schema = getSchema(controller);
 
-  return async (request, reply) => {
-    const { statusCode, body } = await controller.execute(request as Controller.Request);
+  fastify.route({
+    url,
+    method,
+    schema: {
+      body: schema,
+    },
+    handler: async (request, reply) => {
+      const { statusCode, body } =
+        await controller.execute(request as Controller.Request);
 
-    return reply.code(statusCode).send(body);
-  };
+      return reply.code(statusCode).send(body);
+    },
+  });
 }
