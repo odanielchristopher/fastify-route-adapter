@@ -7,11 +7,11 @@ import { SignUpSchema, signUpSchema } from './schemas/signUpSchema';
 
 @Injectable()
 @Schema(signUpSchema)
-export class SignUpController implements IController<unknown> {
+export class SignUpController implements IController<'public', SignUpController.Response> {
   constructor(private readonly signUpUseCase: SignUpUseCase) {}
 
   async execute(
-    params: Controller.Request<SignUpSchema>
+    params: Controller.Request<'public', SignUpSchema>
   ): Promise<Controller.Response<SignUpController.Response>> {
     const { email, name, password } = params.body;
 

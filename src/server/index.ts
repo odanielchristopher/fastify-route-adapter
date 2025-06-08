@@ -7,6 +7,8 @@ import {
   validatorCompiler,
   ZodTypeProvider,
 } from 'fastify-type-provider-zod';
+import { ApplicationError } from '../application/errors/application/ApplicationError';
+import { HttpError } from '../application/errors/http/HttpError';
 import { routes } from './routes';
 
 const fastify = Fastify().withTypeProvider<ZodTypeProvider>();
@@ -23,6 +25,15 @@ fastify.setErrorHandler((error, _request, reply) => {
           field: issue.instancePath,
           message: issue.message,
         })),
+      });
+    }
+
+    if (error instanceof ApplicationError || error instanceof HttpError) {
+      return reply.code(error.statusCode).send({
+        error: {
+          code: error.code,
+          message: error.message,
+        }
       });
     }
 

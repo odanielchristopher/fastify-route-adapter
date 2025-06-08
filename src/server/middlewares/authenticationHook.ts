@@ -1,26 +1,27 @@
 import { FastifyRequest } from 'fastify';
 import { JwtPayload, verify } from 'jsonwebtoken';
 
+import { Unauthorized } from '../../application/errors/http/Unauthorized';
 import { env } from '../../shared/config/env';
 
-export async function authenticationHook(request: FastifyRequest) {
+export async function authenticationMiddleware(request: FastifyRequest) {
   const { authorization } = request.headers;
 
   if (!authorization) {
-    throw new Error('Missing access token.');
+    throw new Unauthorized('Missing access token.');
   }
 
   const [type, token] = authorization.split(' ');
 
   if (type !== 'Bearer') {
-    throw new Error('Acess token type is not accepted.');
+    throw new Unauthorized('Acesss token type is not accepted.');
   }
 
   try {
     const payload = verify(token, env.JWT_SECRET) as JwtPayload;
 
-    request.userId = payload.sub;
+    request.userId = payload.sub ?? null;
   } catch {
-    throw new Error('Invalid token');
+    throw new Unauthorized('Invalid token');
   }
 }

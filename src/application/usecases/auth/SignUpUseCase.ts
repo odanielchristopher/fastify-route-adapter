@@ -3,6 +3,7 @@ import { hash } from 'bcryptjs';
 import { UsersRepository } from '../../../infra/database/repositories/UserRepository';
 import { Injectable } from '../../../kernel/decorators/Injectable';
 
+import { EmailAlreadyInUse } from '../../errors/application/EmailAlreadyInUse';
 import { GenerateAccessTokenUseCase } from './GenerateAccessTokenUseCase';
 
 @Injectable()
@@ -18,7 +19,7 @@ export class SignUpUseCase {
     const emailAlreadyInUse = await this.usersRepository.findByEmail(email);
 
     if (emailAlreadyInUse) {
-      throw new Error('This email is already in use.');
+      throw new EmailAlreadyInUse();
     }
 
     const hashedPassword = await hash(password, 12);

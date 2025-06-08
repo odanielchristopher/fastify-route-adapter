@@ -7,6 +7,6 @@ export type RouteAdapter = (
   opt: {
     url: string,
     method: HTTPMethods,
-    impl: Constructor<IController<any>>,
+    impl: Constructor<IController<any, any>>,
   },
 ) => Promise<void>;

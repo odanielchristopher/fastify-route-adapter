@@ -17,12 +17,12 @@ export const routeAdapter: RouteAdapter = async (
   fastify.route({
     url,
     method,
-    schema: {
-      body: schema,
-    },
+    schema: schema
+      ? { body: schema, }
+      : undefined,
     handler: async (request, reply) => {
       const { statusCode, body } =
-        await controller.execute(request as Controller.Request);
+        await controller.execute(request as Controller.Request<any, any>);
 
       return reply.code(statusCode).send(body);
     },

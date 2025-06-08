@@ -20,5 +20,18 @@ model User {
   email    String @unique
   password String
 
+  products Product[]
+
   @@map("users")
+}
+
+model Product {
+  id     String  @id @default(uuid()) @db.Uuid
+  userId String  @map("user_id") @db.Uuid
+  name   String
+  price  Decimal
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@map("products")
 }
