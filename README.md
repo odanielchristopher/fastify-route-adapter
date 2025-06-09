@@ -2,7 +2,7 @@
 
 ## Visão Geral
 
-Este projeto é uma API moderna criada com **Fastify** e **TypeScript**, utilizando um sistema de **injeção de dependência próprio** com decorators, além de **validação automática** via `zod`, tudo de forma altamente tipada.
+Este projeto é uma API moderna criada com **Fastify** e **TypeScript**, utilizando um sistema de **injeção de dependência próprio** com decorators, além de **validação automática** via `zod` e um fluxo completo de **cadastro e autenticação de usuários com Prisma**, tudo de forma altamente tipada.
 
 O principal objetivo é desacoplar as camadas da aplicação e centralizar a lógica de validação e registro de controllers, facilitando a escalabilidade e manutenção do sistema.
 
@@ -117,6 +117,32 @@ fastify.routeAdapter(fastify, {
 - ✅ Tipagem consistente entre usecases e HTTP
 - ✅ Baixo acoplamento com o Fastify
 - ✅ Fácil escalabilidade e extensão de funcionalidades
+
+---
+
+## Fluxo de Autenticação com Prisma
+
+Este projeto possui um fluxo completo de autenticação utilizando:
+
+- Prisma para acesso ao banco de dados PostgreSQL;
+
+- Zod para validação dos dados de entrada;
+
+- JWT para autenticação via token;
+
+- Bcrypt para verificação de senha com hash.
+
+## Exemplo de fluxo:
+
+1. Usuário envia email e password para /auth/sign-in
+
+2. O SignInController é resolvido via Registry
+
+3. O schema é aplicado automaticamente via @Schema
+
+4. O SignInUseCase valida o usuário com o banco via Prisma
+
+5. Se as credenciais forem válidas, é retornado um accessToken
 
 ---
 
