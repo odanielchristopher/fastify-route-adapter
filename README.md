@@ -1,8 +1,28 @@
 # Projeto Fastify + TypeScript com Injeção de Dependência e Validação Decorada
 
+## O Problema
+
+Ao usar o **fastify-type-provider-zod** em conjunto com o **fastify**, a definição do schema de validação fica junto da definição das rotas. Por exemplo:
+
+```ts
+fastify.post(
+  "/signin",
+  {
+    schema: {
+      body: SignInDto,
+    },
+  },
+  (request, reply) => {}
+);
+```
+
+Quando há uma organização maior, como quando usamos controllers e services/usecases em arquivos separados, a definição do schema fica muito disconectada do controller, além da tipagem poder tornar-se um desafio.
+
+---
+
 ## Visão Geral
 
-Este projeto é uma API moderna criada com **Fastify** e **TypeScript**, utilizando um sistema de **injeção de dependência próprio** com decorators, além de **validação automática** via `zod` e um fluxo completo de **cadastro e autenticação de usuários com Prisma**, tudo de forma altamente tipada.
+Este projeto é uma API moderna criada com **Fastify** e **TypeScript**, utilizando um sistema de **injeção de dependência próprio** com decorators, além de **validação automática** via `zod` e um fluxo completo de **cadastro e autenticação de usuários com Prisma**, tudo totalmente tipado.
 
 O principal objetivo é desacoplar as camadas da aplicação e centralizar a lógica de validação e registro de controllers, facilitando a escalabilidade e manutenção do sistema.
 
@@ -15,7 +35,7 @@ src/
 ├── application/
 │   ├── contracts/      # Interfaces e types do domínio
 │   ├── controllers/    # Controllers organizados por módulo
-│   ├── erros/          # Erros customizados
+│   ├── errors/          # Erros customizados
 │   └── usecases/       # Casos de uso da aplicação
 │
 ├── infra/
